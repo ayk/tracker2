@@ -1,0 +1,290 @@
+
+<html>
+	<head>
+		<title>Tracker Ordered</title>
+		<style>
+			body {
+			  font-family: "Arial", Times, serif;
+			}
+
+			.board {
+			  background: #3cc619;
+			  margin: 15px auto;
+			  border: 1px solid #3cc619;
+			  border-width: 0px 1px 1px 0px;
+			  width: 403px;
+			  cursor: pointer;
+			}
+
+			.board div:hover {
+			  font-weight: bold;
+			  background: yellow;
+			  cursor: pointer;
+			  color: black;
+			}
+
+			.tabelle {
+			  margin: 10px auto;
+			  border: 1px solid grey;
+			  border-width: 0px 1px 1px 0px;
+			  width: 798px;
+			  cursor: default;
+			  background-size: 21px 21px;
+			  background-image: -webkit-linear-gradient(left, grey 1px, transparent 1px), -webkit-linear-gradient(grey 1px, transparent 1px);
+			  background-image: -moz-linear-gradient(left, grey 1px, transparent 1px), -moz-linear-gradient(grey 1px, transparent 1px);
+			  background-image: -o-linear-gradient(left, grey 1px, transparent 1px), -o-linear-gradient(grey 1px, transparent 1px);
+			  background-image: linear-gradient(to right, grey 1px, transparent 1px), linear-gradient(grey 1px, transparent 1px);
+			}
+
+			.control {
+			  width: 400px;
+			  margin: 0px auto;
+			}
+
+			.control div:hover {
+			  font-weight: bold;
+			  text-decoration: underline;
+			  cursor: pointer;
+			}
+
+			.history {
+			  width: 775px;
+			  height: 31px;
+			  margin: 10px auto;
+			  overflow: hidden;
+			}
+
+			.undo {
+			  background: red;
+			  width: 70px;
+			  text-align: center;
+			  font-size: 16px;
+			  font-weight: bold;
+			  color: white;
+			  padding: 5px;
+			  cursor: pointer;
+			  float: left;
+			  -webkit-user-select: none;
+			  -moz-user-select: none;
+			  -ms-user-select: none;
+			  user-select: none;
+			}
+
+			.reset {
+			  background: red;
+			  width: 70px;
+			  text-align: center;
+			  font-size: 16px;
+			  font-weight: bold;
+			  color: white;
+			  padding: 5px;
+			  cursor: pointer;
+			  float: right;
+			  -webkit-user-select: none;
+			  -moz-user-select: none;
+			  -ms-user-select: none;
+			  user-select: none;
+			}
+
+			.screenshot {
+			  margin-left: 45px;
+			  background: grey;
+			  width: 140px;
+			  text-align: center;
+			  font-size: 16px;
+			  font-weight: bold;
+			  color: white;
+			  padding: 5px;
+			  cursor: pointer;
+			  float: left;
+			  -webkit-user-select: none;
+			  -moz-user-select: none;
+			  -ms-user-select: none;
+			  user-select: none;
+			}
+
+			.red {
+			  background: red;
+			  color: white;
+			}
+
+			.black {
+			  background: black;
+			  color: white;
+			}
+
+			.green {
+			  background: green;
+			  color: white;
+			}
+
+			div.number {
+			  float: left;
+			  width: 30px;
+			  margin-left: 1px;
+			  margin-top: 1px;
+			  line-height: 30px;
+			  text-align: center;
+			  cursor: pointer;
+			  -webkit-user-select: none;
+			  -moz-user-select: none;
+			  -ms-user-select: none;
+			  user-select: none;
+			}
+
+			div.number2 {
+			  float: left;
+			  width: 20px;
+			  margin-left: 1px;
+			  margin-top: 1px;
+			  line-height: 20px;
+			  text-align: center;
+			  font-size: 12px;
+			  font-weight: bold;
+			}
+
+			.color {
+			  width: 20px;
+			  line-height: 20px;
+			  margin-top: 1px;
+			  font-size: 10px;
+			}
+
+			.color0 {
+			  background-color: #ff8888;
+			}
+
+			.color1 {
+			  background-color: #ffef1c;
+			}
+
+			.color2 {
+			  background-color: #a6f72c;
+			}
+
+			.color3 {
+			  background-color: #f996ff;
+			}
+
+			.color4 {
+			  background-color: #ffcd8c;
+			}
+
+			.color5 {
+			  background-color: #8cbbff;
+			}
+
+		</style>
+	
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var counter = 1
+				var rednums = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+				var color
+				var tmp = localStorage.getItem("tmp") === null ? [] : JSON.parse(localStorage.getItem("tmp"));
+
+				$(".board").append("<div class=\"number green\" style=\"float:left; width: 30px; height: 92px; text-align: center; line-height: 100px;\">0<div>");
+
+				for ($i = 3; $i <= 36; $i = $i + 3) {
+				  color = rednums.indexOf($i) == -1 ? "black" : "red";
+				  $(".board").append("<div class=\"number " + color + "\">" + $i + "</div>");
+				}
+
+				for ($i = 2; $i <= 35; $i = $i + 3) {
+				  color = rednums.indexOf($i) == -1 ? "black" : "red";
+				  $(".board").append("<div class=\"number " + color + "\">" + $i + "</div>");
+				}
+
+				for ($i = 1; $i <= 34; $i = $i + 3) {
+				  color = rednums.indexOf($i) == -1 ? "black" : "red";
+				  $(".board").append("<div class=\"number " + color + "\">" + $i + "</div>");
+				}
+
+				$(".board").append("<br style=\"clear: both\">")
+
+				$("div.number").click(function() {
+				  tmp.push($(this).text());
+				  color = "color" + Math.floor((counter - 1) / 37);
+				  $("#num" + $(this).text()).append("<div class=\"color " + color + "\">" + counter + "</div>");
+
+				  if ($(this).text() == 0) {
+					color = "green";
+				  } else if (rednums.indexOf(parseInt($(this).text())) == -1) {
+					color = "black";
+				  } else {
+					color = "red";
+				  }
+
+				  $(".history").prepend("<div class=\"number " + color + "\">" + $(this).text() + "</div>");
+				  counter++
+				  localStorage.setItem("tmp", JSON.stringify(tmp));
+				});
+
+
+				$(".tabelle").append("<div id=\"hits\" class=\"number2\"></div>");
+				$("#hits").append("<div>&nbsp;</div>");
+
+				for ($i = 1; $i <= 15; $i++) {
+				  $("#hits").append("<div class=\"number2\">" + $i + "</div>");
+				}
+				$("#hits").append("<div>...</div>");
+				
+				var order = [5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26,0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10]
+				for ($i = 0; $i <= 36; $i++) {
+				  $(".tabelle").append("<div class=\"number2\" id=\"num" + order[$i] + "\">" + order[$i] + "</div>");
+				}
+
+				$(".tabelle").append("<br style=\"clear: both\">")
+
+				for (var i in tmp) {
+				  color = "color" + Math.floor((counter - 1) / 37);
+				  $("#num" + tmp[i]).append("<div class=\"color " + color + "\">" + counter + "</div>");
+
+				  if (tmp[i] == 0) {
+					color = "green";
+				  } else if (rednums.indexOf(parseInt(tmp[i])) == -1) {
+					color = "black";
+				  } else {
+					color = "red";
+				  }
+
+				  $(".history").prepend("<div class=\"number " + color + "\">" + tmp[i] + "</div>");
+				  counter++
+				}
+
+				$("div.undo").click(function() {
+				  $("#num" + tmp.pop() + " div:last-child").remove();
+				  $(".history div:first-child").remove();
+				  localStorage.setItem("tmp", JSON.stringify(tmp));
+				  counter = counter > 1 ? counter - 1 : 1;
+				});
+
+				$("div.reset").click(function() {
+				  if (confirm('Are you sure you want to reset your tracking records?')) {
+					localStorage.removeItem('tmp');
+					location.reload();
+				  }
+				});
+
+			});
+		</script>
+		
+	</head>
+	<body>
+		<div class="board"></div>
+		<div class="control">
+			<div class="undo">UNDO</div>
+			<div class="screenshot">SCREENSHOT</div>
+			<div class="reset">RESET</div>
+			<br style="clear: both" />
+		</div>
+
+		<div class="history">
+			<br style="clear: both" />
+		</div>
+
+		<div class="tabelle"></div>
+	</body>
+</html>
